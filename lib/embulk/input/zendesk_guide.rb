@@ -1,3 +1,7 @@
+require "net/http"
+require "pp"
+require 'json'
+
 module Embulk
   module Input
 
@@ -10,12 +14,35 @@ module Embulk
           "option1" => config.param("option1", :integer),                     # integer, required
           "option2" => config.param("option2", :string, default: "myvalue"),  # string, optional
           "option3" => config.param("option3", :string, default: nil),        # string, optional
+          "url" => config.param("url", :string),
+          "username" => config.param("username", :string),
+          "token" => config.param("token", :string),
         }
 
         columns = [
-          Column.new(0, "example", :string),
-          Column.new(1, "column", :long),
-          Column.new(2, "value", :double),
+          Column.new(0, "id", :long),
+          Column.new(1, "url", :string),
+          Column.new(2, "html_url", :string),
+          Column.new(3, "title", :string),
+          Column.new(4, "body", :string),
+          Column.new(5, "locale", :string),
+          Column.new(6, "source_locale", :string),
+          Column.new(7, "author_id", :long),
+          Column.new(8, "comments_disabled", :boolean),
+          Column.new(9, "outdated_locales", :string),
+          Column.new(10, "outdated", :boolean),
+          Column.new(11, "label_names", :string),
+          Column.new(12, "draft", :boolean),
+          Column.new(13, "promoted", :boolean),
+          Column.new(14, "position", :long),
+          Column.new(15, "vote_sum", :long),
+          Column.new(16, "vote_count", :long),
+          Column.new(17, "section_id", :long),
+          Column.new(18, "user_segment_id", :long),
+          Column.new(19, "permission_group_id", :long),
+          Column.new(20, "created_at", :timestamp),
+          Column.new(21, "edited_at", :timestamp),
+          Column.new(22, "updated_at", :timestamp),
         ]
 
         resume(task, columns, 1, &control)
@@ -43,11 +70,49 @@ module Embulk
         @option1 = task["option1"]
         @option2 = task["option2"]
         @option3 = task["option3"]
+        @url = task["url"]
+        @username = task["username"]
+        @token = task["token"]
+
       end
 
       def run
-        page_builder.add(["example-value", @option1, 0.1])
-        page_builder.add(["example-value", 2, 0.2])
+        uri = URI.parse("#@url/help_center/ja/articles.json")
+        http = Net::HTTP.new(uri.host, uri.port)
+        http.use_ssl = uri.scheme === "https"
+
+        req = Net::HTTP::Get.new(uri.path)
+        req.basic_auth(@username, @token)
+        response = http.request(req)
+        JSON.parse(response.body)["articles"].each {|article|
+          pp article
+          page_builder.add([
+            article["id"],
+            article["url"],
+            article["html_url"],
+            article["title"],
+            article["body"],
+            article["locale"],
+            article["source_locale"],
+            article["author_id"],
+            article["comments_disabled"],
+            article["outdated_locales"],
+            article["outdated"],
+            article["label_names"],
+            article["draft"],
+            article["promoted"],
+            article["position"],
+            article["vote_sum"],
+            article["vote_count"],
+            article["section_id"],
+            article["user_segment_id"],
+            article["permission_group_id"],
+            article["created_at"],
+            article["edited_at"],
+            article["updated_at"],
+          ])
+        }
+
         page_builder.finish
 
         task_report = {}
