@@ -5,8 +5,8 @@ Embulk input plugin of [Zendesk Guide](https://developer.zendesk.com/rest_api/do
 ## Overview
 
 * **Plugin type**: input
-* **Resume supported**: yes
-* **Cleanup supported**: yes
+* **Resume supported**: no
+* **Cleanup supported**: no
 * **Guess supported**: no
 
 ## Configuration
