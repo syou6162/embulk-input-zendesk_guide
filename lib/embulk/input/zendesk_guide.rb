@@ -1,5 +1,4 @@
 require "net/http"
-require "pp"
 require 'json'
 
 module Embulk
@@ -82,7 +81,6 @@ module Embulk
         req.basic_auth(@username, @token)
         response = http.request(req)
         JSON.parse(response.body)["articles"].each {|article|
-          pp article
           page_builder.add([
             article["id"],
             article["url"],
