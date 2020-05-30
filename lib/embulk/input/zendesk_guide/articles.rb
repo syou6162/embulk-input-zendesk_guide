@@ -36,14 +36,27 @@ class Articles
   end
 
   def get
-    uri = URI.parse("#@url/help_center/ja/articles.json")
+    result = []
+    next_url = "#@url/help_center/ja/articles.json"
+    while !next_url.nil? do
+      tmp, next_url = get_from_url(next_url)
+      result.concat(tmp)
+      return result if next_url.nil?
+      sleep 1
+    end
+  end
+
+  private
+  def get_from_url(url)
+    uri = URI.parse(url)
     http = Net::HTTP.new(uri.host, uri.port)
     http.use_ssl = uri.scheme === "https"
 
-    req = Net::HTTP::Get.new(uri.path)
+    req = Net::HTTP::Get.new(uri.to_s)
     req.basic_auth(@username, @token)
-    response = http.request(req)
-    JSON.parse(response.body)["articles"].map {|article|
+    response = JSON.parse(http.request(req).body)
+
+    return response["articles"].map {|article|
       [
         article["id"],
         article["url"],
@@ -69,7 +82,6 @@ class Articles
         Date.parse(article["edited_at"]).to_time,
         Date.parse(article["updated_at"]).to_time,
       ]
-    }
+    }, response["next_page"]
   end
-
 end
