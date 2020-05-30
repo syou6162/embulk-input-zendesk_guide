@@ -46,7 +46,7 @@ module Embulk
       end
 
       def run
-        page_builder.add(["example-value", 1, 0.1])
+        page_builder.add(["example-value", @option1, 0.1])
         page_builder.add(["example-value", 2, 0.2])
         page_builder.finish
 
