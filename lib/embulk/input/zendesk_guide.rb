@@ -11,9 +11,6 @@ module Embulk
       def self.transaction(config, &control)
         # configuration code:
         task = {
-          "option1" => config.param("option1", :integer),                     # integer, required
-          "option2" => config.param("option2", :string, default: "myvalue"),  # string, optional
-          "option3" => config.param("option3", :string, default: nil),        # string, optional
           "url" => config.param("url", :string),
           "username" => config.param("username", :string),
           "token" => config.param("token", :string),
