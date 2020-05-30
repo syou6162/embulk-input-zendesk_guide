@@ -1,6 +1,6 @@
 # Zendesk Guide input plugin for Embulk
 
-TODO: Write short description here and embulk-input-zendesk_guide.gemspec file.
+Embulk input plugin of [Zendesk Guide](https://developer.zendesk.com/rest_api/docs/help_center/introduction) (Help Center).
 
 ## Overview
 
@@ -11,17 +11,20 @@ TODO: Write short description here and embulk-input-zendesk_guide.gemspec file.
 
 ## Configuration
 
-- **option1**: description (integer, required)
-- **option2**: description (string, default: `"myvalue"`)
-- **option3**: description (string, default: `null`)
+- **url**: URL for Zendesk Guide API (string, required)
+- **username**: username to use api (string, required)
+- **token**: Token (string, required)
 
 ## Example
 
 ```yaml
 in:
   type: zendesk_guide
-  option1: example1
-  option2: example2
+  url: https://support.example.com/api/v2
+  username: user@example.com
+  token: xxx
+out:
+  type: stdout
 ```
 
 
