@@ -64,9 +64,6 @@ module Embulk
 
       def init
         # initialization code:
-        @option1 = task["option1"]
-        @option2 = task["option2"]
-        @option3 = task["option3"]
         @url = task["url"]
         @username = task["username"]
         @token = task["token"]
