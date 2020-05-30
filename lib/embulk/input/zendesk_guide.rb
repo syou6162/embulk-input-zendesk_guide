@@ -2,9 +2,10 @@ require "net/http"
 require 'date'
 require 'json'
 
+require_relative 'zendesk_guide/articles'
+
 module Embulk
   module Input
-
     class ZendeskGuide < InputPlugin
       Plugin.register_input("zendesk_guide", self)
 
@@ -15,33 +16,7 @@ module Embulk
           "username" => config.param("username", :string),
           "token" => config.param("token", :string),
         }
-
-        columns = [
-          Column.new(0, "id", :long),
-          Column.new(1, "url", :string),
-          Column.new(2, "html_url", :string),
-          Column.new(3, "title", :string),
-          Column.new(4, "body", :string),
-          Column.new(5, "locale", :string),
-          Column.new(6, "source_locale", :string),
-          Column.new(7, "author_id", :long),
-          Column.new(8, "comments_disabled", :boolean),
-          Column.new(9, "outdated_locales", :string),
-          Column.new(10, "outdated", :boolean),
-          Column.new(11, "label_names", :string),
-          Column.new(12, "draft", :boolean),
-          Column.new(13, "promoted", :boolean),
-          Column.new(14, "position", :long),
-          Column.new(15, "vote_sum", :long),
-          Column.new(16, "vote_count", :long),
-          Column.new(17, "section_id", :long),
-          Column.new(18, "user_segment_id", :long),
-          Column.new(19, "permission_group_id", :long),
-          Column.new(20, "created_at", :timestamp),
-          Column.new(21, "edited_at", :timestamp),
-          Column.new(22, "updated_at", :timestamp),
-        ]
-
+        columns = Articles.columns
         resume(task, columns, 1, &control)
       end
 
@@ -63,47 +38,12 @@ module Embulk
       # end
 
       def init
-        # initialization code:
-        @url = task["url"]
-        @username = task["username"]
-        @token = task["token"]
-
+        @articles = Articles.new(task["url"], task["username"], task["token"])
       end
 
       def run
-        uri = URI.parse("#@url/help_center/ja/articles.json")
-        http = Net::HTTP.new(uri.host, uri.port)
-        http.use_ssl = uri.scheme === "https"
-
-        req = Net::HTTP::Get.new(uri.path)
-        req.basic_auth(@username, @token)
-        response = http.request(req)
-        JSON.parse(response.body)["articles"].each {|article|
-          page_builder.add([
-            article["id"],
-            article["url"],
-            article["html_url"],
-            article["title"],
-            article["body"],
-            article["locale"],
-            article["source_locale"],
-            article["author_id"],
-            article["comments_disabled"],
-            article["outdated_locales"],
-            article["outdated"],
-            article["label_names"],
-            article["draft"],
-            article["promoted"],
-            article["position"],
-            article["vote_sum"],
-            article["vote_count"],
-            article["section_id"],
-            article["user_segment_id"],
-            article["permission_group_id"],
-            Date.parse(article["created_at"]).to_time,
-            Date.parse(article["edited_at"]).to_time,
-            Date.parse(article["updated_at"]).to_time,
-          ])
+        @articles.get.each {|article|
+          page_builder.add(article)
         }
 
         page_builder.finish
