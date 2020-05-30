@@ -1,4 +1,5 @@
 require "net/http"
+require 'date'
 require 'json'
 
 module Embulk
@@ -102,9 +103,9 @@ module Embulk
             article["section_id"],
             article["user_segment_id"],
             article["permission_group_id"],
-            article["created_at"],
-            article["edited_at"],
-            article["updated_at"],
+            Date.parse(article["created_at"]).to_time,
+            Date.parse(article["edited_at"]).to_time,
+            Date.parse(article["updated_at"]).to_time,
           ])
         }
 
