@@ -1,0 +1,13 @@
+name: ruby linter
+
+on: [push]
+
+jobs:
+  check_ruby_scripts_format:
+    name: check format of ruby scripts
+    runs-on: ubuntu-16.04
+    steps:
+    - name: Rubocop Linter Action
+      uses: andrewmcodes/rubocop-linter-action@v3.0.0
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}      
