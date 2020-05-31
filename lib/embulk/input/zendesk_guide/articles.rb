@@ -58,7 +58,7 @@ class Articles
 
     return response["articles"].map {|article|
       [
-        article["id"],
+          article["id"],
         article["url"],
         article["html_url"],
         article["title"],
