@@ -9,7 +9,7 @@ class Articles
   
   def self.columns
     [
-      Embulk::Column.new(0, "id", :long),
+        Embulk::Column.new(0, "id", :long),
       Embulk::Column.new(1, "url", :string),
       Embulk::Column.new(2, "html_url", :string),
       Embulk::Column.new(3, "title", :string),
@@ -43,7 +43,7 @@ class Articles
       result.concat(tmp)
       return result if next_url.nil?
       sleep 1
-    end
+      end
   end
 
   private
