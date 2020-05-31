@@ -44,7 +44,7 @@ class Articles
       return result if next_url.nil?
 
       sleep 1
-      end
+    end
   end
 
   private
