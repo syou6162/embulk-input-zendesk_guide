@@ -22,7 +22,7 @@ module Embulk
       end
 
       def self.resume(task, columns, count)
-        task_reports = yield(task, columns, count)
+        yield(task, columns, count)
 
         next_config_diff = {}
         next_config_diff
