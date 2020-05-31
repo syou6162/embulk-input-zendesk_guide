@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 Gem::Specification.new do |spec|
   spec.name          = 'embulk-input-zendesk_guide'
   spec.version       = '0.1.1'

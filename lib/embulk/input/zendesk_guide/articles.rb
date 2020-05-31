@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'embulk/column'
 
 class Articles
