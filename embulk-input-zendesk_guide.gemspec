@@ -2,7 +2,7 @@
 
 Gem::Specification.new do |spec|
   spec.name          = 'embulk-input-zendesk_guide'
-  spec.version       = '0.1.1'
+  spec.version       = '0.1.2'
   spec.authors       = ['Yasuhisa Yoshida']
   spec.summary       = 'Zendesk Guide input plugin for Embulk'
   spec.description   = 'Loads records from Zendesk Guide.'
