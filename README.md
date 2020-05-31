@@ -1,6 +1,8 @@
 # Zendesk Guide input plugin for Embulk
 
-Embulk input plugin of [Zendesk Guide](https://developer.zendesk.com/rest_api/docs/help_center/introduction) (Help Center).
+Embulk input plugin of [Zendesk Guide](https://developer.zendesk.com/rest_api/docs/help_center/introduction) (Help Center). You can load following records from Zendesk Guide:
+
+- [Articles](https://developer.zendesk.com/rest_api/docs/help_center/articles#list-articles)
 
 ## Overview
 
